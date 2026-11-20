@@ -1,0 +1,130 @@
+@font-face { font-family: "Outfit"; src: url("fonts/Outfit-Variable.ttf") format("truetype"); font-weight: 100 900; font-display: swap; }
+@font-face { font-family: "JetBrains Mono"; src: url("fonts/JetBrainsMono-Regular.ttf") format("truetype"); font-weight: 400; font-display: swap; }
+@font-face { font-family: "JetBrains Mono"; src: url("fonts/JetBrainsMono-Medium.ttf") format("truetype"); font-weight: 500; font-display: swap; }
+
+* { box-sizing: border-box; }
+html { color-scheme: dark; }
+body {
+  margin: 0; min-height: 100dvh; display: flex; flex-direction: column;
+  background: var(--tk-fondo); color: var(--tk-tinta);
+  font: 300 16px/1.6 var(--tk-fuente-ui);
+  /* retícula sutil, sin degradados de color */
+  background-image: linear-gradient(var(--tk-linea) 1px, transparent 1px), linear-gradient(90deg, var(--tk-linea) 1px, transparent 1px);
+  background-size: 64px 64px; background-position: -1px -1px;
+}
+.mono { font-family: var(--tk-fuente-datos); font-size: 12px; letter-spacing: .12em; text-transform: uppercase; }
+.tenue { color: var(--tk-tintaApagada); }
+.solo-lectores { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+:focus-visible { outline: 2px solid var(--tk-tinta); outline-offset: 3px; }
+
+.cabecera { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; padding: 16px 24px; border-bottom: 1px solid var(--tk-linea); background: var(--tk-fondo); }
+
+/* ── Escena y letrero colgante ── */
+.escena { flex: 1; display: flex; flex-direction: column; align-items: center; padding: 0 16px 48px; overflow: hidden; }
+.cadenas { display: flex; gap: min(44vw, 340px); height: 72px; }
+.cadenas i { width: 1px; background: var(--tk-lineaAlta); position: relative; }
+.cadenas i::after { content: ""; position: absolute; left: -3px; bottom: -1px; width: 7px; height: 7px; border: 1px solid var(--tk-tinta); background: var(--tk-fondo); }
+
+.letrero { transform-origin: 50% 0; will-change: transform; backface-visibility: hidden; animation: balanceo 7s ease-in-out infinite; width: min(100%, 820px); margin-top: -1px; }
+.letrero:hover, .letrero:focus-within { animation-play-state: paused; }
+@keyframes balanceo { 0%, 100% { transform: rotate(-.35deg); } 50% { transform: rotate(.35deg); } }
+
+/* Marco con corte diagonal: el borde de 1 px se logra con dos capas recortadas igual */
+.letrero__marco, .dialogo__marco { background: var(--tk-lineaAlta); padding: 1px; clip-path: polygon(0 0, calc(100% - 22px) 0, 100% 22px, 100% 100%, 0 100%); }
+.letrero__cuerpo, .dialogo__cuerpo { background: var(--tk-panel); }
+.letrero__cuerpo { padding: clamp(32px, 7vw, 72px) clamp(20px, 5vw, 56px); text-align: center; }
+.letrero__pre { margin: 0; font-size: clamp(14px, 2.6vw, 20px); font-weight: 500; letter-spacing: .5em; text-transform: uppercase; color: var(--tk-tintaSuave); padding-left: .5em; }
+.letrero__titulo { margin: .1em 0 .15em; font-weight: 200; font-size: clamp(44px, 12vw, 120px); line-height: 1.05; letter-spacing: .22em; padding-left: .22em; text-transform: uppercase; }
+.letrero__sub { margin: 0 0 32px; color: var(--tk-tintaApagada); }
+.letrero__nota { margin: 20px 0 0; color: var(--tk-tintaApagada); font-size: 11px; }
+.pie-letrero { margin: 24px 0 0; font-size: 11px; }
+
+/* ── Botones ── */
+.boton { font: 500 13px var(--tk-fuente-ui); letter-spacing: .22em; text-transform: uppercase; cursor: pointer; padding: 16px 40px; border: 1px solid var(--tk-inversoFondo); background: var(--tk-inversoFondo); color: var(--tk-inversoTinta); clip-path: polygon(0 0, calc(100% - 14px) 0, 100% 14px, 100% 100%, 0 100%); transition: background var(--tk-normal) var(--tk-curva), color var(--tk-normal) var(--tk-curva); }
+.boton:hover:not(:disabled) { background: var(--tk-fondo); color: var(--tk-tinta); box-shadow: inset 0 0 0 1px var(--tk-tinta); }
+.boton--sec { background: transparent; color: var(--tk-tinta); border-color: var(--tk-lineaAlta); clip-path: none; }
+.boton--sec:hover:not(:disabled) { box-shadow: none; border-color: var(--tk-tinta); }
+.boton:disabled { opacity: .5; cursor: progress; }
+#comprar { padding: 20px 56px; font-size: 15px; }
+
+/* ── Diálogo ── */
+dialog { padding: 0; border: 0; background: transparent; color: inherit; width: min(94vw, 620px); max-height: 94dvh; overflow: visible; }
+dialog::backdrop { background: rgba(0, 0, 0, .86); }
+dialog[open] { animation: entra var(--tk-lento) var(--tk-curva); }
+@keyframes entra { from { opacity: 0; transform: translateY(8px); } }
+.dialogo__cuerpo { padding: 28px 32px; max-height: calc(94dvh - 2px); overflow-y: auto; position: relative; scrollbar-width: thin; scrollbar-color: var(--tk-lineaAlta) transparent; }
+.dialogo__cuerpo h2 { margin: 0 0 12px; font-weight: 200; font-size: 28px; letter-spacing: .16em; text-transform: uppercase; }
+.pasos { margin: 0 0 8px; color: var(--tk-tintaApagada); }
+.cerrar { position: absolute; top: 12px; right: 36px; background: none; border: 1px solid transparent; color: var(--tk-tintaApagada); font-size: 16px; width: 36px; height: 36px; cursor: pointer; }
+.cerrar:hover { color: var(--tk-tinta); border-color: var(--tk-lineaAlta); }
+.aviso { margin: 0 0 20px; padding: 10px 14px; border: 1px dashed var(--tk-tinta); font-size: 14px; }
+.acciones { display: flex; gap: 12px; justify-content: flex-end; margin-top: 24px; flex-wrap: wrap; }
+
+/* Tarifas: filas separadas por línea; seleccionada = inversión */
+fieldset { border: 0; padding: 0; margin: 0; }
+.tarifa { display: grid; grid-template-columns: 1fr auto; gap: 2px 16px; padding: 14px 16px; border: 1px solid var(--tk-linea); margin-top: -1px; cursor: pointer; position: relative; transition: background var(--tk-rapido) var(--tk-curva); }
+.tarifa:hover { border-color: var(--tk-tinta); z-index: 1; }
+.tarifa input { position: absolute; opacity: 0; inset: 0; cursor: pointer; }
+.tarifa:has(input:focus-visible) { outline: 2px solid var(--tk-tinta); outline-offset: 2px; z-index: 2; }
+.tarifa:has(input:checked) { background: var(--tk-inversoFondo); color: var(--tk-inversoTinta); border-color: var(--tk-inversoFondo); }
+.tarifa b { font-weight: 500; letter-spacing: .08em; text-transform: uppercase; font-size: 14px; }
+.tarifa .precio { font-family: var(--tk-fuente-datos); font-size: 14px; text-align: right; grid-row: span 2; align-self: center; white-space: nowrap; }
+.tarifa small { font-size: 13px; opacity: .72; }
+.tarifa .precio small { display: block; font-size: 11px; opacity: .7; }
+
+/* Formulario */
+.campo { display: block; margin-bottom: 12px; font-size: 13px; letter-spacing: .08em; text-transform: uppercase; color: var(--tk-tintaSuave); }
+.campo input { display: block; width: 100%; margin-top: 4px; padding: 10px 14px; background: #050505; border: 1px solid var(--tk-lineaAlta); color: var(--tk-tinta); font: 300 16px var(--tk-fuente-ui); letter-spacing: 0; text-transform: none; border-radius: 0; }
+.campo input:focus { outline: none; border-color: var(--tk-tinta); }
+.check { display: flex; gap: 12px; align-items: flex-start; font-size: 13px; color: var(--tk-tintaSuave); margin-top: 8px; }
+.check input { margin-top: 4px; width: 18px; height: 18px; accent-color: #f2f2f2; flex: none; }
+.check a { color: var(--tk-tinta); }
+.error { display: block; color: var(--tk-tinta); font: 500 12px var(--tk-fuente-datos); margin-top: 6px; letter-spacing: .04em; text-transform: none; }
+.error:not(:empty)::before, p.error:not([hidden])::before { content: "✕ "; }
+.error:empty { display: none; }
+p.error { padding: 8px 12px; background: var(--tk-inversoFondo); color: var(--tk-inversoTinta); }
+.trampa { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+.resumen { padding: 10px 14px; border: 1px solid var(--tk-linea); margin: 0 0 20px; color: var(--tk-tintaSuave); }
+
+/* Factura */
+.factura { margin: 20px 0; border-top: 1px solid var(--tk-linea); }
+.factura div { display: flex; justify-content: space-between; gap: 16px; padding: 10px 0; border-bottom: 1px solid var(--tk-linea); }
+.factura dt { color: var(--tk-tintaApagada); }
+.factura dd { margin: 0; text-align: right; }
+.sello { display: inline-block; padding: 4px 10px; background: var(--tk-inversoFondo); color: var(--tk-inversoTinta); }
+
+.tk-footer { margin-top: auto; }
+@media (max-width: 560px) { .dialogo__cuerpo { padding: 24px 18px; } .cerrar { right: 30px; } .cadenas { gap: 60vw; } }
+@media (prefers-reduced-motion: reduce) { .letrero, dialog[open] { animation: none; } .boton, .tarifa { transition: none; } }
+
+/* El letrero se balancea: un clip-path bajo rotación rasteriza con saltos, así que lleva borde real
+   y la esquina cortada se dibuja con un degradado de corte duro (fondo | línea | panel). */
+.letrero__marco { position: relative; padding: 0; clip-path: none; background: none; border: 2px solid var(--tk-lineaAlta); }
+.letrero__marco::after {
+  content: ""; position: absolute; top: -2px; right: -2px; width: 26px; height: 26px; pointer-events: none;
+  background: linear-gradient(to bottom left, var(--tk-fondo) 0 calc(50% - 1px), var(--tk-lineaAlta) calc(50% - 1px) calc(50% + 1px), var(--tk-panel) calc(50% + 1px));
+}
+
+/* ── Responsive fino ── */
+.cerrar { width: 44px; height: 44px; top: 8px; }
+.tarifa small { line-height: 1.45; display: block; }
+@media (max-width: 480px) {
+  .cabecera { padding: 12px 16px; }
+  .dialogo__cuerpo { padding: 22px 16px; }
+  .dialogo__cuerpo h2 { font-size: 22px; letter-spacing: .1em; line-height: 1.25; margin-right: 40px; }
+  .aviso { font-size: 13px; }
+  .tarifa { grid-template-columns: 1fr; padding: 12px 14px; }
+  .tarifa .precio { grid-row: auto; text-align: left; margin-top: 4px; }
+  .tarifa .precio small { display: inline; margin-left: 8px; }
+  .acciones .boton { flex: 1 1 100%; }
+  .boton { padding: 16px 24px; }
+  #comprar { padding: 18px 40px; }
+  .letrero__sub { font-size: 11px; }
+}
+@media (max-height: 520px) and (orientation: landscape) {
+  .cadenas { height: 28px; }
+  .letrero__cuerpo { padding: 20px 24px; }
+  .letrero__titulo { font-size: clamp(36px, 9vh, 64px); margin: 0; }
+  .letrero__sub { margin-bottom: 14px; }
+  .dialogo__cuerpo { padding: 16px 24px; }
+}

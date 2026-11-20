@@ -1,0 +1,19 @@
+{
+  "name": "compra-una-vida",
+  "version": "1.0.0",
+  "description": "Letrero de broma: compra aquí una vida. Los pagos no son reales; la factura (falsa) llega por correo.",
+  "type": "module",
+  "private": true,
+  "license": "MIT",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "start": "node --env-file-if-exists=.env server.js",
+    "test": "node --test test/",
+    "probar-correo": "node --env-file-if-exists=.env scripts/probar-correo.js"
+  },
+  "dependencies": {
+    "nodemailer": "^10.6.1"
+  }
+}

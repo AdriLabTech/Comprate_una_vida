@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="es" data-tema="oscuro">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Compra aquí una vida</title>
+  <meta name="description" content="Compra aquí una vida. Tarifas flexibles, sin permanencia (salvo la vida). Los pagos no son reales.">
+  <meta name="color-scheme" content="dark">
+  <link rel="icon" type="image/png" href="marca.png">
+  <link rel="stylesheet" href="takumi.css">
+  <link rel="stylesheet" href="footer.css">
+  <link rel="stylesheet" href="styles.css">
+  <script src="app.js" defer type="module"></script>
+</head>
+<body>
+  <header class="cabecera">
+    <span class="mono">COMPRA AQUÍ UNA VIDA, S.L.</span>
+    <span class="mono tenue">Reg. Mercantil Vital · Tomo 1 · Folio ∞</span>
+  </header>
+
+  <main class="escena">
+    <div class="cadenas" aria-hidden="true"><i></i><i></i></div>
+    <div class="letrero" id="letrero">
+      <div class="letrero__marco">
+        <section class="letrero__cuerpo">
+          <p class="letrero__pre">Compra aquí</p>
+          <h1 class="letrero__titulo">Una vida</h1>
+          <p class="letrero__sub mono">Stock disponible · 8.100.000.000 unidades</p>
+          <button class="boton" id="comprar" type="button">Comprar</button>
+          <p class="letrero__nota mono">Los pagos no son reales · Sin permanencia*</p>
+        </section>
+      </div>
+    </div>
+    <p class="pie-letrero mono tenue">*Salvo la propia vida.</p>
+  </main>
+
+  <dialog id="dialogo" aria-labelledby="dlg-titulo">
+    <div class="dialogo__marco">
+      <div class="dialogo__cuerpo">
+        <button class="cerrar" type="button" id="cerrar" aria-label="Cerrar">✕</button>
+        <p class="mono pasos" id="pasos">Paso 1 de 3</p>
+
+        <!-- Paso 1: tarifas -->
+        <section id="paso-tarifas">
+          <h2 id="dlg-titulo">Tarifas de vida</h2>
+          <p class="aviso"><span aria-hidden="true">▲</span> Aviso: los pagos <b>no son reales</b>. Esto es una broma con aspecto serio.</p>
+          <form id="form-tarifas">
+            <fieldset id="lista-tarifas"><legend class="solo-lectores">Elige tu tarifa de vida</legend></fieldset>
+            <p class="error" id="err-tarifa" role="alert" hidden></p>
+            <div class="acciones"><button class="boton" type="submit">Continuar</button></div>
+          </form>
+        </section>
+
+        <!-- Paso 2: datos -->
+        <section id="paso-datos" hidden>
+          <h2>Datos del titular</h2>
+          <p class="resumen mono" id="resumen"></p>
+          <form id="form-datos" novalidate>
+            <label class="campo">Nombre completo
+              <input name="nombre" autocomplete="name" maxlength="80" required>
+              <span class="error" data-err="nombre" role="alert"></span>
+            </label>
+            <label class="campo">Correo electrónico
+              <input name="email" type="email" autocomplete="email" maxlength="120" required>
+              <span class="error" data-err="email" role="alert"></span>
+            </label>
+            <label class="campo">Ciudad de residencia
+              <input name="ciudad" autocomplete="address-level2" maxlength="60" required>
+              <span class="error" data-err="ciudad" role="alert"></span>
+            </label>
+            <label class="campo">Motivo de la compra <span class="tenue">(opcional)</span>
+              <input name="motivo" maxlength="200">
+            </label>
+            <!-- Trampa para bots: oculta a personas -->
+            <div class="trampa" aria-hidden="true"><label>Web <input name="web" tabindex="-1" autocomplete="off"></label></div>
+            <label class="check">
+              <input type="checkbox" name="consentimiento" required>
+              <span>Acepto que mis datos (nombre, correo, ciudad, motivo, IP y navegador) se envíen por correo al titular de esta web para emitir la factura de broma. No se guardan en ningún servidor. Más en la <a href="https://takumi-organization.github.io/privacidad/" rel="noopener" target="_blank">política de privacidad</a>.</span>
+            </label>
+            <span class="error" data-err="consentimiento" role="alert"></span>
+            <p class="error" id="err-general" role="alert" hidden></p>
+            <div class="acciones">
+              <button class="boton boton--sec" type="button" id="atras">Atrás</button>
+              <button class="boton" type="submit" id="enviar">Emitir factura</button>
+            </div>
+          </form>
+        </section>
+
+        <!-- Paso 3: factura -->
+        <section id="paso-factura" hidden>
+          <h2>Factura emitida</h2>
+          <dl class="factura mono">
+            <div><dt>Número</dt><dd id="f-numero"></dd></div>
+            <div><dt>Concepto</dt><dd id="f-tarifa"></dd></div>
+            <div><dt>Total</dt><dd id="f-total"></dd></div>
+            <div><dt>Estado</dt><dd><span class="sello">▲ Pendiente de pago</span></dd></div>
+          </dl>
+          <p>Tu factura ya ha llegado a nuestro departamento de cobros. Queda usted obligado a abonarla con carácter inmediato, retroactivo y, a ser posible, emocional.</p>
+          <p class="tenue">(Es una broma: no se ha cobrado nada ni existe obligación alguna.)</p>
+          <div class="acciones"><button class="boton" type="button" id="fin">Volver al letrero</button></div>
+        </section>
+      </div>
+    </div>
+  </dialog>
+
+  <footer class="tk-footer" data-tema="oscuro">
+    <div class="tk-footer__in">
+      <a class="tk-footer__marca" href="https://takumi-organization.github.io" rel="noopener">Web desarrollada por Takumi-Organization</a>
+      <nav class="tk-footer__enlaces" aria-label="Información legal de Takumi-Organization">
+        <a href="https://takumi-organization.github.io/privacidad/" rel="noopener">Privacidad</a>
+        <a href="https://takumi-organization.github.io/terminos/" rel="noopener">Términos</a>
+        <a href="https://takumi-organization.github.io/licencias/" rel="noopener">Licencia</a>
+      </nav>
+    </div>
+  </footer>
+</body>
+</html>
