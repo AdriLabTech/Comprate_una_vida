@@ -28,6 +28,13 @@ Si publicas la web, pon `SITE_URL` (solo lo usa FormSubmit) y `TRUST_PROXY=true`
 ## El correo
 Factura con cabecera y logo de marca, saludo y titular con el nombre del comprador, tabla de datos (cliente, correo, ciudad, motivo, IP, navegador legible), concepto con una cláusula graciosa propia de cada tarifa, base + IVA + total, sello «pendiente de pago», vencimiento y recargo. **Responder** escribe directamente al comprador. Diseño en tablas con estilos en línea y modo claro forzado para que se vea igual en Gmail/Outlook/móvil; incluye versión en texto plano.
 
+## Despliegue (Render)
+GitHub Pages **no sirve**: solo aloja páginas estáticas y la web necesita el servidor Node. `render.yaml` deja el despliegue preparado: Render → New → Blueprint → este repo; te pide `MAIL_TO` y `SITE_URL`.
+
+- **Plan gratuito:** Render bloquea el SMTP saliente (465/587), así que el correo sale por FormSubmit (hay que activar el formulario una vez con el enlace que llega a `MAIL_TO`). Se duerme tras 15 min sin visitas y tarda ~1 min en despertar.
+- **Correo HTML por Gmail (SMTP):** requiere un plan de pago de Render u otro host que permita SMTP; añade las variables SMTP en su panel (nunca en el repo).
+- Comprobado en la documentación de Render el 2026-11-21; revisa límites y precios antes de contratar.
+
 ## Estructura
 - `server.js` — servidor HTTP (sin framework), API `GET /api/tarifas` y `POST /api/comprar`, estáticos, cabeceras de seguridad.
 - `src/tarifas.js` — tarifas e importes **decididos por el servidor** (el cliente solo manda el id).

@@ -6,7 +6,7 @@
   "private": true,
   "license": "MIT",
   "engines": {
-    "node": ">=22"
+    "node": ">=22.9 <25"
   },
   "scripts": {
     "start": "node --env-file-if-exists=.env server.js",

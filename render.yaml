@@ -1,0 +1,21 @@
+# Despliegue en Render (Blueprint). Panel → New → Blueprint → elige este repo.
+# Plan gratuito: Render BLOQUEA el SMTP saliente (465/587), así que aquí no se define SMTP:
+# el correo sale por FormSubmit (HTTPS). Para el correo HTML con Gmail, usa un plan de pago
+# (o un host que permita SMTP) y añade SMTP_HOST/SMTP_PORT/SMTP_SECURE/SMTP_USER/SMTP_PASS/MAIL_FROM.
+services:
+  - type: web
+    name: compra-una-vida
+    runtime: node
+    plan: free
+    buildCommand: npm install --omit=dev
+    startCommand: npm start
+    healthCheckPath: /api/tarifas
+    envVars:
+      - key: HOST
+        value: 0.0.0.0
+      - key: TRUST_PROXY
+        value: "true"
+      - key: MAIL_TO          # correo que recibe las facturas; Render te lo pregunta al crear
+        sync: false
+      - key: SITE_URL         # URL pública (https://compra-una-vida.onrender.com); FormSubmit la usa como Origin
+        sync: false
