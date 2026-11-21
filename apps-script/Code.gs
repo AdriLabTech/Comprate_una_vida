@@ -50,3 +50,15 @@ function doPost(e) {
 function responder(objeto) {
   return ContentService.createTextOutput(JSON.stringify(objeto)).setMimeType(ContentService.MimeType.JSON);
 }
+
+/**
+ * Ejecútala UNA VEZ a mano desde el editor (desplegable de funciones → autorizar → Ejecutar)
+ * para que Google te pida y conceda el permiso de enviar correo. Te llega un correo de aviso.
+ */
+function autorizar() {
+  MailApp.sendEmail(
+    Session.getEffectiveUser().getEmail(),
+    'Permiso concedido · Compra aquí una vida',
+    'El script ya puede enviar facturas desde esta cuenta.'
+  );
+}

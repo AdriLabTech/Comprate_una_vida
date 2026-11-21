@@ -14,6 +14,7 @@ Sirve en Render gratis (que bloquea el SMTP): la web llama por HTTPS a un script
 3. **Ejecutar como: Yo** · **Quién tiene acceso: Cualquier persona**.
 4. **Implementar** y concede los permisos. Google avisará de «aplicación no verificada»: *Configuración avanzada → Ir a (nombre del proyecto)*. Es tu propio script.
 5. Copia la **URL de la aplicación web** (termina en `/exec`).
+6. **Concede el permiso de correo:** en el editor, desplegable de funciones → **`autorizar`** → **Ejecutar** → acepta los permisos. Te llega un correo de aviso. Sin este paso la web recibe «No tienes permiso para llamar a MailApp.sendEmail».
 
 > Los nombres de botones pueden variar un poco según la versión de la interfaz de Google.
 
