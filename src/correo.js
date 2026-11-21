@@ -1,9 +1,10 @@
-import { mkdir, writeFile } from 'node:fs/promises';
+import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import nodemailer from 'nodemailer';
 
-const MARCA = fileURLToPath(new URL('../public/marca.png', import.meta.url));
+const MARCA = fileURLToPath(new URL('../public/marca-correo.png', import.meta.url)); // 72 px, para el correo
+const MARCA_WEB = fileURLToPath(new URL('../public/marca.png', import.meta.url));
 
 // Crea el "enviador". Con SMTP_HOST envía de verdad; sin él (desarrollo) deja el correo en ./outbox.
 export function crearEnviador(env = process.env, dirSalida = 'outbox') {
@@ -33,6 +34,28 @@ export function crearEnviador(env = process.env, dirSalida = 'outbox') {
           attachments: [{ filename: 'marca.png', path: MARCA, cid: 'marca' }],
           signal: AbortSignal.timeout(20_000),
         }),
+    };
+  }
+
+  // Google Apps Script: HTTPS (sirve en hosts que bloquean SMTP), envía desde tu Gmail con el HTML completo.
+  if (env.APPS_SCRIPT_URL && env.APPS_SCRIPT_KEY) {
+    return {
+      modo: 'appsscript',
+      async enviar(f, respondera) {
+        const logo = (await readFile(MARCA)).toString('base64');
+        const r = await fetch(env.APPS_SCRIPT_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ clave: env.APPS_SCRIPT_KEY, asunto: f.asunto, texto: f.texto, html: f.html, responder: respondera, logo }),
+          redirect: 'follow', // Apps Script responde con una redirección
+          signal: AbortSignal.timeout(25_000),
+        });
+        const texto = await r.text();
+        let j;
+        try { j = JSON.parse(texto); }
+        catch { throw new Error(`Apps Script devolvió algo que no es JSON (¿publicado con acceso «Cualquier persona»?). Estado ${r.status}`); }
+        if (!j.ok) throw new Error(`Apps Script: ${j.error || 'error desconocido'}`);
+      },
     };
   }
 
@@ -67,7 +90,7 @@ export function crearEnviador(env = process.env, dirSalida = 'outbox') {
     async enviar(f, respondera) {
       await mkdir(dirSalida, { recursive: true });
       const base = join(dirSalida, f.numero);
-      await writeFile(`${base}.html`, f.html.replace('cid:marca', pathToFileURL(MARCA).href)); // vista previa local
+      await writeFile(`${base}.html`, f.html.replace('cid:marca', pathToFileURL(MARCA_WEB).href)); // vista previa local
       await writeFile(`${base}.txt`, `Asunto: ${f.asunto}\nResponder a: ${respondera}\n\n${f.texto}\n`);
     },
   };

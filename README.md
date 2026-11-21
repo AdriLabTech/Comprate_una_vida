@@ -16,12 +16,12 @@ npm install
 # edita .env y pega tu contraseña de aplicación de Google en SMTP_PASS (ya viene todo lo demás)
 npm run probar-correo    # envía una factura de ejemplo a MAIL_TO y dice si funcionó
 npm start                # http://127.0.0.1:3417
-npm test                 # 11 pruebas (node:test)
+npm test                 # 16 pruebas (node:test)
 ```
 
 **Contraseña de aplicación de Google:** cuenta de Google → Seguridad → Verificación en 2 pasos (activada) → «Contraseñas de aplicaciones» → crea una y pégala en `SMTP_PASS` (valen los espacios). No sirve la contraseña normal.
 
-Modos de envío, por prioridad: **SMTP** (si hay `SMTP_HOST` y `SMTP_PASS`) → **FormSubmit.co** (si solo hay `MAIL_TO`; sin claves, un clic de activación) → **desarrollo** (sin nada: guarda en `outbox/`).
+Modos de envío, por prioridad: **SMTP** (`SMTP_HOST` + `SMTP_PASS`) → **Google Apps Script** (`APPS_SCRIPT_URL` + `APPS_SCRIPT_KEY`; HTTPS, correo HTML completo desde tu Gmail, sirve en Render gratis: ver `apps-script/LEEME.md`) → **FormSubmit.co** (solo `MAIL_TO`; tabla simple, requiere activación) → **desarrollo** (sin nada: guarda en `outbox/`).
 
 Si publicas la web, pon `SITE_URL` (solo lo usa FormSubmit) y `TRUST_PROXY=true` detrás de un proxy.
 
@@ -31,7 +31,7 @@ Factura con cabecera y logo de marca, saludo y titular con el nombre del comprad
 ## Despliegue (Render)
 GitHub Pages **no sirve**: solo aloja páginas estáticas y la web necesita el servidor Node. `render.yaml` deja el despliegue preparado: Render → New → Blueprint → este repo; te pide `MAIL_TO` y `SITE_URL`.
 
-- **Plan gratuito:** Render bloquea el SMTP saliente (465/587), así que el correo sale por FormSubmit (hay que activar el formulario una vez con el enlace que llega a `MAIL_TO`). Se duerme tras 15 min sin visitas y tarda ~1 min en despertar.
+- **Plan gratuito:** Render bloquea el SMTP saliente (465/587). Usa **Apps Script** (`apps-script/LEEME.md`; correo con el diseño completo) o, como reserva, FormSubmit (tabla simple; hay que activar el formulario una vez). Se duerme tras 15 min sin visitas y tarda ~1 min en despertar.
 - **Correo HTML por Gmail (SMTP):** requiere un plan de pago de Render u otro host que permita SMTP; añade las variables SMTP en su panel (nunca en el repo).
 - Comprobado en la documentación de Render el 2026-11-21; revisa límites y precios antes de contratar.
 

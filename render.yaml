@@ -1,7 +1,10 @@
 # Despliegue en Render (Blueprint). Panel → New → Blueprint → elige este repo.
-# Plan gratuito: Render BLOQUEA el SMTP saliente (465/587), así que aquí no se define SMTP:
-# el correo sale por FormSubmit (HTTPS). Para el correo HTML con Gmail, usa un plan de pago
-# (o un host que permita SMTP) y añade SMTP_HOST/SMTP_PORT/SMTP_SECURE/SMTP_USER/SMTP_PASS/MAIL_FROM.
+# Plan gratuito: Render BLOQUEA el SMTP saliente (465/587). El correo sale por HTTPS:
+#   - Google Apps Script (recomendado, correo HTML completo): ver apps-script/LEEME.md
+#   - FormSubmit (reserva, solo tabla) si no se definen las variables de Apps Script.
+# Con un plan de pago también vale SMTP: SMTP_HOST/SMTP_PORT/SMTP_SECURE/SMTP_USER/SMTP_PASS/MAIL_FROM.
+# Nota: Render solo pregunta las variables `sync: false` al CREAR el Blueprint; en un servicio ya creado
+# añádelas a mano en Environment.
 services:
   - type: web
     name: compra-una-vida
@@ -16,6 +19,10 @@ services:
       - key: TRUST_PROXY
         value: "true"
       - key: MAIL_TO          # correo que recibe las facturas; Render te lo pregunta al crear
+        sync: false
+      - key: APPS_SCRIPT_URL  # URL /exec del script publicado (apps-script/LEEME.md)
+        sync: false
+      - key: APPS_SCRIPT_KEY  # clave compartida con Code.gs
         sync: false
       - key: SITE_URL         # URL pública (https://compra-una-vida.onrender.com); FormSubmit la usa como Origin
         sync: false
